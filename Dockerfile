@@ -12,7 +12,6 @@ RUN \
   unzip terraform_0.12.24_linux_amd64.zip && \
   mv terraform /usr/local/bin/
   
-
 # Add files.
 ADD . /root/terraform-gcp
 # ADD root/.bashrc /root/.bashrc
