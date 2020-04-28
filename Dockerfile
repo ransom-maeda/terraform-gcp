@@ -18,6 +18,9 @@ ADD . /root/terraform-gcp
 # ADD root/.gitconfig /root/.gitconfig
 # ADD root/.scripts /root/.scripts
 
+RUN \
+  chmod +x /root/terraform-gcp/bin/entrypoint.sh
+
 # Set environment variables.
 ENV HOME /root
 
@@ -26,3 +29,5 @@ WORKDIR /root
 
 # Define default command.
 CMD ["bash"]
+
+ENTRYPOINT ["/root/terraform-gcp/bin/entrypoint.sh"]

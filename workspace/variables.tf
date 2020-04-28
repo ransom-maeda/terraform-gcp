@@ -13,3 +13,9 @@ variable "org_id" {
 variable "project_id" {
   type = string
 }
+
+variable "project_apis" {
+  type = list
+  description = "List of APIs to enable in project"
+  default     = []
+}

@@ -5,34 +5,19 @@
 2. Install [Vagrant](https://www.vagrantup.com/downloads.html)
 3. Install [Docker](https://www.docker.com/products/docker-desktop)
 
-### Set up GCP account
-[GCP Resource](https://cloud.google.com/functions/docs/quickstart)
-1. Install gcloud
-2. Run `gcloud init` and follow steps to authenticate and create
-   a new root project
-3. Enable [serviceusage API](https://console.developers.google.com/apis/library/serviceusage.googleapis.com)
-4. Create admin service account
-    ```
-    gcloud iam service-accounts create [SA NAME] \
-        --description "[SA DESCRIPTION]" \
-        --display-name "[SA-DISPLAY-NAME]"
-    ```   
-5. Generate service account key
-    ```
-    gcloud iam service-accounts keys create OUTPUTFILE \
-        --iam-account=[IAM_ACCOUNT]
-    ```
-6. Move service account key to terraform-gcp/access directory
-7. Create gcp.env file in terraform-gcp/configs directory
+### Set up GCP admin project, admin service account, and project
+1. Create gcp.env file in terraform-gcp/configs directory
     ```
     cp terraform-gcp/gcp.env.template terrafrom-gcp/gcp.env
     ```
-8. Update values in terraform-gcp/gcp.env with the appropriate values
-9. Build Docker image and run
-10. Run init.sh to setup environment
-    ```
-    ./root/terraform-gcp/bin/init.sh
-    ```
+2. Update values in terraform-gcp/gcp.env with the appropriate values
+3. Create tfvars file in terraform-gcp/workspace/tfvars
+   ```
+   cp terraform-gcp/workspace/tfvars/project.tfvars.template terraform/tfvars/${PROJECT_NAME}.tfvars
+   ```
+   Note: Be sure ${PROJECT_NAME} is same value as one set in terraform-gcp/gcp.env
+4. Build Docker image and run
+5. When prompted, authenticate seesion and provide access token
 
 ## Directory layout
 ```
@@ -43,13 +28,12 @@
 │ ├── workspace
 │ │ ├── modules
 │ │ ├── tfvars
+│ │ |  ├── project.tfvars.template
 │ │ ├── project.tf
 │ │ ├── variables.tf
 │ │ ├── outputs.tf
-│ ├── access
-│ │ ├── <GCP-access-key>.json
 │ ├── configs
 │ │ ├── gcp.env.template
-│ ├── bin
-│ │ ├── setup.sh
-│ │ ├── init.sh
+│ ├── bin 
+│ │ ├── entrypoint.sh
+```
