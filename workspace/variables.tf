@@ -10,7 +10,6 @@ variable "org_id" {
   type = string
 }
 
-variable "region" {
+variable "project_id" {
   type = string
 }
-
