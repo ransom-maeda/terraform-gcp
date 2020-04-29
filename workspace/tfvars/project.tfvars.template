@@ -1,0 +1,3 @@
+project_name = "[CHANGEME to project name]"
+project_id = "[CHANGEME to project-id]"
+project_apis = [CHANGEME to comma-delimited list of APIs to enable]

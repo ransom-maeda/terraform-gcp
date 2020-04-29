@@ -13,35 +13,26 @@ resource "google_project" "project" {
   org_id          = var.org_id
 }
 
-resource "google_service_account" "ichiki_deployer" {
- count = local.ichiki_is_dev_or_prod && local.ichiki_ci_project_id != "" ? 1 : 0
- account_id  = "${local.ichiki_meta_environment}-deployer"
- display_name = "SA for deploying infra and applications within a meta-environment"
- project   = local.ichiki_ci_project_id
+resource "google_service_account" "deployer" {
+ account_id   = var.deployer_account_id
+ display_name = "Project Deployment Service Account"
+ project      = google_project.project.project_id
 }
 
-resource "google_project_iam_member" "ichiki_deployer_owner" {
- for_each = var.ichiki_deployer_service_account_email != "" ? toset(local.ichiki_project_ids) : toset([])
- project = each.value
- role  = "roles/owner"
- member = "serviceAccount:${var.ichiki_deployer_service_account_email}"
+resource "google_project_iam_member" "deployer_owner" {
+ role   = "roles/owner"
+ member = "serviceAccount:${google_service_account.deployer.email}"
 }
 
-resource "google_storage_bucket_iam_member" "ichiki_deployer_terraform_state" {
- count = var.ichiki_deployer_service_account_email != "" ? 1 : 0 
+resource "google_storage_bucket_iam_member" "deployer_terraform_state" {
  bucket = "${var.org_short_prefix}-terraform-state-${var.environment}"
- role  = "roles/storage.objectAdmin"
- member = "serviceAccount:${var.ichiki_deployer_service_account_email}"
+ role   = "roles/storage.objectAdmin"
+ member = "serviceAccount:${google_service_account.deployer.email}"
 }
 
 resource "google_project_service" "service" {
-  for_each = toset([
-    "container.googleapis.com",
-    "serviceusage.googleapis.com"
-  ])
-
-  service = each.key
-
+  for_each           = toset(var.project_apis)
+  service            = each.key
   project            = google_project.project.project_id
   disable_on_destroy = false
 }
