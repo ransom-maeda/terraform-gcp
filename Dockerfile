@@ -19,7 +19,10 @@ ADD . /root/terraform-gcp
 # ADD root/.scripts /root/.scripts
 
 RUN \
-  chmod +x /root/terraform-gcp/bin/entrypoint.sh
+  chmod +x /root/terraform-gcp/bin/entrypoint.sh && \
+  dos2unix /root/terraform-gcp/bin/entrypoint.sh && \
+  dos2unix /root/terraform-gcp/configs/gcp.env && \
+  dos2unix /root/terraform-gcp/workspace/tfvars/*.tfvars
 
 # Set environment variables.
 ENV HOME /root

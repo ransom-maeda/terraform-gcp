@@ -19,3 +19,7 @@ variable "project_apis" {
   description = "List of APIs to enable in project"
   default     = []
 }
+
+variable "deployer_account_id" {
+  type = string
+}

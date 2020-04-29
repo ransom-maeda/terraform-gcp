@@ -78,5 +78,5 @@ terraform init
 terraform plan --var-file=tfvars/${PROJECT_NAME}.tfvars
 
 # Apply
-terraform apply --var-file=tfvars/${PROJECT_NAME}.tfvars
-terraform 
+terraform apply --var-file=tfvars/${PROJECT_NAME}.tfvars \
+	-input=false -auto-approve

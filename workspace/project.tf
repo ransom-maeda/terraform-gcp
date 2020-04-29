@@ -24,8 +24,12 @@ resource "google_project_iam_member" "deployer_owner" {
  member = "serviceAccount:${google_service_account.deployer.email}"
 }
 
+resource "google_storage_bucket" "terraform_state" {
+  name = "${random_id.id.hex}-terraform-state"
+}
+
 resource "google_storage_bucket_iam_member" "deployer_terraform_state" {
- bucket = "${var.org_short_prefix}-terraform-state-${var.environment}"
+ bucket = google_storage_bucket.terraform_state.name
  role   = "roles/storage.objectAdmin"
  member = "serviceAccount:${google_service_account.deployer.email}"
 }
